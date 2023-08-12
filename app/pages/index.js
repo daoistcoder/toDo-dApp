@@ -30,6 +30,7 @@ const Home = () => {
                     </button>
                 )}
                 {/* <WalletMultiButton /> */}
+                <WalletMultiButton />
             </div>
 
             <div className={styles.mainContainer}>

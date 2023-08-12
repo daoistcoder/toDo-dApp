@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import '../styles/global.css'
-// Import WalletConnectionProvider from components
-// Import the solana wallet css
+import { WalletConnectProvider } from '../components/WalletConnectionProvider'
+import '@solana/wallet-adapter-react-ui/styles.css'
 
 function MyApp({ Component, pageProps }) {
     return (
@@ -11,7 +11,9 @@ function MyApp({ Component, pageProps }) {
             </Head>
             <main>
                 {/* Wrap provider around App */}
+                <WalletConnectProvider>
                     <Component {...pageProps} />
+                </WalletConnectProvider>
             </main>
         </>
     )
