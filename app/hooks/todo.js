@@ -115,7 +115,37 @@ export function useTodo() {
     const handleChange = (e)=> {
         setInput(e.target.value)
     }
-  
+   
+    const initializeUser = async () => {
+        // Check if the program exist & wallet is connected
+        if(program && publicKey) {
+            try {
+                setTransactionPending(true)
+                const [profilePda, profileBump] = findProgramAddressSync([utf8.encode('USER_STATE'), publicKey.toBuffer()], program.programId)
+
+                // Initialize transaction -> to connect to the blockchain
+                const tx = await program.methods
+                .initializeUser()
+                .accounts({
+                    userProfile: profilePda,
+                    authority: publicKey,
+                    SystemProgram: SystemProgram.programId,
+                })
+                .rpc()
+
+                // Succesfully initialize -> .initializeUser from program in blockchain
+                setInitialized(true)
+                toast.success('Succesfully Initialized')
+
+            } catch(error) {
+                console.log(error)
+                toast.error(error.toString())
+            } finally {
+                setTransactionPending(false)
+            }
+        }
+    }
+
     const initializeStaticUser = () => {
         setInitialized(true)
     }
@@ -171,5 +201,5 @@ export function useTodo() {
     const incompleteTodos = useMemo(() => todos.filter((todo) => !todo.account.marked), [todos])
     const completedTodos = useMemo(() => todos.filter((todo) => todo.account.marked), [todos])
 
-    return { initialized, initializeStaticUser, loading, transactionPending, completedTodos, incompleteTodos, markStaticTodo, removeStaticTodo, addStaticTodo, input, setInput, handleChange }
+    return { initialized, initializeStaticUser, loading, transactionPending, completedTodos, incompleteTodos, markStaticTodo, removeStaticTodo, addStaticTodo, input, setInput, handleChange, initializeUser }
 }
