@@ -1,6 +1,8 @@
 import Head from 'next/head'
 import '../styles/global.css'
 
+import { Toaster } from 'react-hot-toast'
+
 import { WalletConnectProvider } from '../components/WalletConnectionProvider'
 import '@solana/wallet-adapter-react-ui/styles.css'
 
@@ -14,6 +16,7 @@ function MyApp({ Component, pageProps }) {
                 {/* Wrap provider around App */}
                 <WalletConnectProvider>
                     <Component {...pageProps} />
+                    <Toaster />
                 </WalletConnectProvider>
             </main>
         </>
