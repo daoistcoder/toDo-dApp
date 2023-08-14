@@ -80,7 +80,7 @@ export function useTodo() {
 
     useEffect(() => {
         // Fetch a userProfile IF there is a profile then get its TodoAccounts
-        const findProfileACcounts = async () => {
+        const findProfileAccounts = async () => {
             if (program && publicKey && !transactionPending) {
                 try {
                     setLoading(true)
@@ -88,10 +88,11 @@ export function useTodo() {
                     const profileAccount = await program.account.userProfile.fetch(profilePda)
 
                     if(profileAccount) {
+                        console.log("ACCOUNT ALREADY INITALIZED!")
                         setLastTodo(profileAccount.lastTodo)
                         setInitialized(true)
 
-                        const todoAccounts = await program.account.todo_account.all([authorFilter(publicKey.toString())])
+                        const todoAccounts = await program.account.todoAccount.all([authorFilter(publicKey.toString())])
                         setTodos(todoAccounts)
                     } else {
                         console.log("NOT YET INITIALIZED")
@@ -107,7 +108,7 @@ export function useTodo() {
             }
         }
 
-        findProfileACcounts()
+        findProfileAccounts()
 
     }, [publicKey, program, transactionPending])
 
