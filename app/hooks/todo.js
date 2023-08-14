@@ -204,7 +204,7 @@ export function useTodo() {
             try {
                 setTransactionPending(true)
                 setLoading(true)
-                const [profilePda, profileBump] = findProgramAddressSync([utf8.encode(['TODO_STATE']), publicKey.toBuffer()], program.programId)
+                const [profilePda, profileBump] = findProgramAddressSync([utf8.encode(['USER_STATE']), publicKey.toBuffer()], program.programId)
 
                 await program.methods
                 .markTodo(todoIdx)
