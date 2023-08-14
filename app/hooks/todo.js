@@ -150,6 +150,40 @@ export function useTodo() {
         setInitialized(true)
     }
 
+    const addTodo = async (e) => {
+        e.preventDefault()
+        if (program && publicKey) {
+            try {
+                setTransactionPending(true)
+
+                // Connect to profilePda in blockchain
+                const [profilePda, profileBump] = findProgramAddressSync([utf8.encode('USER_STATE'), publicKey.toBuffer()], program.programId)
+                // Connect to todoPda in blockchain
+                const [todoPda, todoBump] = findProgramAddressSync([utf8.encode('TODO_STATE'), publicKey.toBuffer(), Uint8Array.from([lastTodo])], program.programId)
+
+                // Takes input and set as content
+                if (input) {
+                    await program.methods
+                    .addTodo(input)
+                    .accounts({
+                        userProfile: profilePda,
+                        todoAccount: todoPda,
+                        authority: publicKey,
+                        systemProgram: SystemProgram.programId
+                    })
+                    .rpc()
+                    toast.success('Successfully added todo.')
+                }
+            } catch(error) {
+                console.log(error)
+                toast.error(error.toString())
+            } finally {
+                setTransactionPending(false)
+                setInput("")
+            }
+        }
+    }
+
     const addStaticTodo = (e) => {
         e.preventDefault()
         if(input) {
@@ -201,5 +235,5 @@ export function useTodo() {
     const incompleteTodos = useMemo(() => todos.filter((todo) => !todo.account.marked), [todos])
     const completedTodos = useMemo(() => todos.filter((todo) => todo.account.marked), [todos])
 
-    return { initialized, initializeStaticUser, loading, transactionPending, completedTodos, incompleteTodos, markStaticTodo, removeStaticTodo, addStaticTodo, input, setInput, handleChange, initializeUser }
+    return { initialized, initializeStaticUser, loading, transactionPending, completedTodos, incompleteTodos, markStaticTodo, removeStaticTodo, addStaticTodo, input, setInput, handleChange, initializeUser, addTodo }
 }
