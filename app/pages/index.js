@@ -6,7 +6,7 @@ import styles from '../styles/Home.module.css'
 
 
 const Home = () => {
-    const { initialized, initializeStaticUser, loading, transactionPending, completedTodos, incompleteTodos, addTodo, markTodo, removeTodo, markStaticTodo,removeStaticTodo, addStaticTodo, input,  handleChange, initializeUser } = useTodo()
+    const { initialized, loading, transactionPending, completedTodos, incompleteTodos, input,  handleChange, initializeUser, addTodo, markTodo, removeTodo } = useTodo()
 
 
     return (
